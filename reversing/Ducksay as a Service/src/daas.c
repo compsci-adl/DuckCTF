@@ -21,7 +21,7 @@ int main() {
     {
         char temp[256];
 
-        for (int i = 0; i < strlen(buffer) * 2; i += 2)
+        for (int i = 0; i < strlen(buffer) * 2 - 1; i += 2)
         {
             temp[i] = '\\';
             temp[i+1] = buffer[i/2];
