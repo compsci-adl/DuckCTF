@@ -1,0 +1,61 @@
+body, html {
+    height: 100%;
+}
+
+body {
+    height: 100%;
+    color: darkslategray;
+    font-family: Sans-Serif;
+    text-align: center;
+    background-image: url('/juggler.jpg');
+    background-position: center;
+    background-size: cover;
+    background-repeat: no-repeat;
+}
+
+.container {
+    position: absolute;
+    top: 40%;
+    left: 50%;
+    -ms-transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%);
+    margin: 0;
+    width: 40em;
+}
+
+.login {
+    position: relative;
+    top: 70%;
+    left: 50%;
+    -ms-transform: translate(-25%, -10%);
+    transform: translate(-25%, -10%);
+
+    display: grid;
+    grid-template-columns: max-content max-content;
+    align-items: center;
+    grid-gap: 5px;
+}
+
+.login label {
+    text-align: right;
+}
+
+.login label:after {
+    content: ":";
+}
+
+.login input[type=text], input[type=password] {
+    width: 15em;
+    padding: 0.5em 0em;
+}
+
+.login input[type=submit] {
+    height: 2em;
+    width: 7.5em;
+    grid-column: 2;
+    text-align: center;
+}
+
+.admin {
+    color: white;
+}
