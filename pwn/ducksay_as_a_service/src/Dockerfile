@@ -15,4 +15,4 @@ RUN cp /home/duck.cow /usr/local/share/cows/ && \
 
 USER guest
 
-ENTRYPOINT ["socat", "TCP-LISTEN:8000,nodelay,reuseaddr,fork", "EXEC:'stdbuf -i0 -o0 -e0 /home/daas'"]
+ENTRYPOINT ["socat", "TCP-LISTEN:8000,nodelay,reuseaddr,fork", "EXEC:'stdbuf -i0 -o0 -e0 /home/daas && kill -9'"]
