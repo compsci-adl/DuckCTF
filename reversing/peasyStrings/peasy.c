@@ -1,23 +1,38 @@
+#include <stdint.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
 char *get_dec_password() {
-  char enc_flag[19] = {0x30, 0x36, 0x33, 0x26, 0x31, 0x1c, 0x30,
-                       0x36, 0x33, 0x26, 0x31, 0x1c, 0x30, 0x26,
-                       0x20, 0x31, 0x26, 0x37, 0x0};
-  char *password = malloc(19);
-  password[18] = 0;
-  for (int i = 0; i < 18; i++)
-    password[i] = enc_flag[i] ^ 0x43;
+  char enc_flag[28] = {0x18, 0x1c, 0x8,  0xa,  0x2,  0x12, 0x1d,
+                       0x1,  0x0,  0x1a, 0x36, 0x0,  0x1a, 0x36,
+                       0x1d, 0x6,  0x6,  0x36, 0xc,  0x8,  0x1a,
+                       0x10, 0x36, 0x5d, 0x5c, 0x14, 0x69, 0x0};
+
+  char *password = malloc(27);
+  password[27] = 0;
+  for (int i = 0; i < 27; i++)
+    password[i] = enc_flag[i] ^ 0x69;
   return password;
 }
 
 int main(int argc, char **argv) {
 
+  double input = 0;
+
+  puts("Enter the super secret number");
+  scanf("%lu", (uint64_t *)&input);
+
+  // 9221120237041090560 The int representation of NAN
+  //  NAN != NAN  holds true that is the trick
+  if (input == input) {
+    puts("The duck quacks NaN NaN NaN NaN BATMAN!!");
+    return 0;
+  }
+
   char buff[32];
 
-  puts("Enter the password:");
+  puts("Enter the flag:");
 
   scanf("%32s", buff);
 
