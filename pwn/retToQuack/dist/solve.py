@@ -6,7 +6,7 @@ p = process('./ropToQuack')
 #context.terminal = ['alacritty', '-e']
 #gdb.attach(p, '''   b main''')
 
-elf = ELF('./retToQuack')
+elf = ELF('./ropToQuack')
 libc = ELF('./libc.so')
 
 p.recvline()

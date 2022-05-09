@@ -1,12 +1,12 @@
 from pwn import *
 
-p = process('./ropToQuack')
+p = process('./dist/ropToQuack')
 
 context.terminal = ['alacritty', '-e']
 
 gdb.attach(p, '''   b main''')
 
-elf = ELF('./retToQuack')
+elf = ELF('./dist/ropToQuack')
 libc = ELF('/usr/lib/libc.so.6')
 
 p.recvline()
