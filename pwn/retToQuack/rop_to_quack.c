@@ -12,6 +12,7 @@ void do_stuff() {
 
 void rop2() {}
 
+
 void rop() {
   asm("pop %rdi");
   asm("ret");
