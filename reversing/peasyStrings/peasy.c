@@ -23,6 +23,7 @@ int main(int argc, char **argv) {
   puts("Enter the super secret number");
   scanf("%lu", (uint64_t *)&input);
 
+  //quack{this_is_too_easy_45}
   // 9221120237041090560 The int representation of NAN
   //  NAN != NAN  holds true that is the trick
   if (input == input) {
