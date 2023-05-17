@@ -1,4 +1,4 @@
-***REMOVED***
+# Challenge description
 
 ## Dinner
 
@@ -8,7 +8,7 @@ Could you find the name of the restaurant's head chef?
 
 Flag format: quack{firstname_lastname}
 
-***REMOVED***
+# Solution
 
 Search for Korean restaurant with the neon sign, and Plus 82 Pocha should appear in the results.
 The head chef's name is Janghoon 'Kurtis' Choi. (Accept "Jang-hoon", "Janghoon", etc)
