@@ -1,0 +1,72 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: homebrewed-block-cipher
+  labels:
+    category: crypto # We assign labels to the deployment to link it to a service later, and to help manage deployments
+    challenge: homebrewed-block-cipher
+spec:
+  replicas: 3 # The no of replicas sets the no of instances/pods of the challenge deployed on the cluster
+  selector:
+    matchLabels:
+      category: crypto
+      challenge: homebrewed-block-cipher
+  template:
+    metadata:
+      annotations:
+        container.apparmor.security.beta.kubernetes.io/homebrewed-block-cipher: unconfined
+      labels:
+        category: crypto
+        challenge: homebrewed-block-cipher
+    spec:
+      containers:
+      - name: homebrewed-block-cipher
+        image: asia-east1-docker.pkg.dev/duckctf/workshop-challenges/homebrewed-block-cipher@sha256:3f268d324fb8380729c0d04e7969b2d806c3b2ff0f94f85cde07296c31391001 # Set this URL to your challenge container's image
+        imagePullPolicy: Always
+        resources: # Resource limits for the container. These are important, in case people manage to max out CPU/RAM on your challenge
+          limits:
+            cpu: 100m
+            memory: 25Mi
+          requests:
+            cpu: 10m
+            memory: 15Mi
+        ports: # Port exposed by the container, you can add multiple
+        - containerPort: 5000
+          name: port-5000
+            #volumeMounts:
+            #- mountPath: /tmp
+            #  name: tmp
+        securityContext:
+          # readOnlyRootFilesystem: true
+          privileged: true
+          seccompProfile:
+            type: Unconfined
+          capabilities:
+            drop:
+            - all
+            add: ["SETUID", "SETGID", "SYS_ADMIN", "NET_BIND_SERVICE"]
+
+      imagePullSecrets:
+      - name: regcred
+      # volumes:
+      # - name: tmp
+      #   emptyDir: {}
+---
+apiVersion: v1
+kind: Service
+metadata: # Set the homebrewed-block-cipher/crypto SAME as the deployment, otherwise they won't link to each other
+  name: homebrewed-block-cipher
+  labels:
+    category: crypto
+    challenge: crypto
+spec:
+  type: NodePort
+  selector:
+    category: crypto
+    challenge: homebrewed-block-cipher
+  ports:
+    - port: 5000 # The port exposed by the container
+      name: port-5000
+      targetPort: 5000 # The port exposed by the container
+      nodePort: 30000 # The port that is exposed on each Node on the cluster
+ 

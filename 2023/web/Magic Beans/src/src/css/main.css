@@ -1,0 +1,61 @@
+body {
+    background-color: #F3EBE1;
+    color: #171922;
+}
+
+#title {
+    font-family: Borel;
+    
+}
+
+.bean-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+}
+
+.bean-card {
+    background-color: #E1D5CB;
+    border-radius: 16px;
+    display: flex;
+    gap: 16px;
+    padding: 16px;
+}
+
+.bean-card h5 {
+    font-weight: 700;
+}
+
+.bean-desc {
+    flex: 1;
+    display: flex;
+    /* align-items: center; */
+    flex-direction: column;
+}
+
+.bean-image-box {
+    border-radius: 16px;
+    background-color: #EDEDE9;
+    height: 100%;
+    display: block;
+}
+
+.search-bar {
+    display: flex;
+    gap: 16px;
+    width: 100%;
+}
+
+#search {
+    flex: 1;
+    border-radius: 50vw;
+    border: #D1BEB1 3px solid;
+    padding: 24px 32px;
+}
+
+#submit {
+    border-radius: 50vw;
+    background-color: #D1BEB1;
+    border: #D1BEB1 3px solid;
+    height: auto;
+}

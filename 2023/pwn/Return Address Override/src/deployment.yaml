@@ -1,0 +1,70 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: return-address-override
+  labels:
+    category: pwn # We assign labels to the deployment to link it to a service later, and to help manage deployments
+    challenge: return-address-override
+spec:
+  replicas: 3 # The no of replicas sets the no of instances/pods of the challenge deployed on the cluster
+  selector:
+    matchLabels:
+      category: pwn
+      challenge: return-address-override
+  template:
+    metadata:
+      annotations:
+        container.apparmor.security.beta.kubernetes.io/return-address-override: unconfined
+      labels:
+        category: pwn
+        challenge: return-address-override
+    spec:
+      containers:
+      - name: return-address-override
+        image: asia-east1-docker.pkg.dev/duckctf/workshop-challenges/return-address-override@sha256:5e59a38214f9120306311c5b531a20b10a373ccceac888fc18d692ed9c1d9c32 # Set this URL to your challenge container's image
+        imagePullPolicy: Always
+        resources: # Resource limits for the container. These are important, in case people manage to max out CPU/RAM on your challenge
+          limits:
+            cpu: 100m
+            memory: 25Mi
+          requests:
+            cpu: 10m
+            memory: 10Mi
+        ports: # Port exposed by the container, you can add multiple
+        - containerPort: 1337
+          name: port-1337
+            #volumeMounts:
+            #- mountPath: /tmp
+            #  name: tmp
+        securityContext:
+          seccompProfile:
+            type: Unconfined
+          # readOnlyRootFilesystem: true
+          capabilities:
+            drop:
+            - all
+            add: ["SETUID", "SETGID", "SYS_ADMIN", "SYS_PTRACE", "NET_BIND_SERVICE"]
+      imagePullSecrets:
+      - name: regcred
+      # volumes:
+      # - name: tmp
+      #   emptyDir: {}
+---
+apiVersion: v1
+kind: Service
+metadata: # Set the return-address-override/pwn SAME as the deployment, otherwise they won't link to each other
+  name: return-address-override
+  labels:
+    category: pwn
+    challenge: pwn
+spec:
+  type: NodePort
+  selector:
+    category: pwn
+    challenge: return-address-override
+  ports:
+    - port: 1337 # The port exposed by the container
+      name: port-1337
+      targetPort: 1337 # The port exposed by the container
+      nodePort: 30003 # The port that is exposed on each Node on the cluster
+ 

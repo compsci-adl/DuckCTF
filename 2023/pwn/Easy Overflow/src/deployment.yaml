@@ -1,0 +1,70 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: easy-overflow
+  labels:
+    category: pwn # We assign labels to the deployment to link it to a service later, and to help manage deployments
+    challenge: easy-overflow
+spec:
+  replicas: 3 # The no of replicas sets the no of instances/pods of the challenge deployed on the cluster
+  selector:
+    matchLabels:
+      category: pwn
+      challenge: easy-overflow
+  template:
+    metadata:
+      annotations:
+        container.apparmor.security.beta.kubernetes.io/easy-overflow: unconfined
+      labels:
+        category: pwn
+        challenge: easy-overflow
+    spec:
+      containers:
+      - name: easy-overflow
+        image: asia-east1-docker.pkg.dev/duckctf/workshop-challenges/easy-overflow@sha256:5847b0b8ad6cd09078b0a0d8ef167f0fb063e4878eb73374b11dda5966d4e80d # Set this URL to your challenge container's image
+        imagePullPolicy: Always
+        resources: # Resource limits for the container. These are important, in case people manage to max out CPU/RAM on your challenge
+          limits:
+            cpu: 100m
+            memory: 25Mi
+          requests:
+            cpu: 10m
+            memory: 10Mi
+        ports: # Port exposed by the container, you can add multiple
+        - containerPort: 1337
+          name: port-1337
+            #volumeMounts:
+            #- mountPath: /tmp
+            #  name: tmp
+        securityContext:
+          seccompProfile:
+            type: Unconfined
+          # readOnlyRootFilesystem: true
+          capabilities:
+            drop:
+            - all
+            add: ["SETUID", "SETGID", "SYS_ADMIN", "SYS_PTRACE", "NET_BIND_SERVICE"]
+      imagePullSecrets:
+      - name: regcred
+      # volumes:
+      # - name: tmp
+      #   emptyDir: {}
+---
+apiVersion: v1
+kind: Service
+metadata: # Set the easy-overflow/pwn SAME as the deployment, otherwise they won't link to each other
+  name: easy-overflow
+  labels:
+    category: pwn
+    challenge: pwn
+spec:
+  type: NodePort
+  selector:
+    category: pwn
+    challenge: easy-overflow
+  ports:
+    - port: 1337 # The port exposed by the container
+      name: port-1337
+      targetPort: 1337 # The port exposed by the container
+      nodePort: 30001 # The port that is exposed on each Node on the cluster
+ 

@@ -1,0 +1,26 @@
+version: '3.7'
+
+services:
+  app:
+    image: asia-east1-docker.pkg.dev/duckctf/workshop-challenges/beancodex-app
+    build: .
+    restart: unless-stopped
+    ports:
+      - 8000:80
+    links:
+      - db
+    environment:
+      - DB_USERNAME=baby
+      - DB_PASSWORD=<REDACTED>
+      - DB_DATABASE=beantome
+    depends_on:
+      - db
+
+  db:
+    image: mariadb:10.7
+    restart: unless-stopped
+    environment:
+      - MARIADB_ROOT_PASSWORD=<REDACTED>
+      - MYSQL_DATABASE=beantome
+    volumes:
+      - ./shared:/docker-entrypoint-initdb.d
