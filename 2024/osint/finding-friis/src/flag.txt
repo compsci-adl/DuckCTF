@@ -1,0 +1,4 @@
+quack{adelaidegaol}
+quack{adelaide_gaol}
+quack{Adelaide_Gaol}
+quack{ADELAIDE_GAOL}

@@ -1,0 +1,37 @@
+Tower One:
+MCC: 505
+MNC: 2
+LAC / TAC: 8831
+CID: 50912
+Radio Type: GSM
+Transmitter Power: 10 Watts
+Transmitter Gain: 10 dBi
+Frequency: 1800 Mhz
+Receiver Gain: 3dBi
+Received Power: 3.1779e-7 Watts
+
+
+Tower Two:
+MCC: 505
+MNC: 3
+LAC / TAC: 5025
+CID: 55013
+Radio Type: GSM
+Transmitter Power: 10 Watts
+Transmitter Gain: 10 dBi
+Frequency: 1800 Mhz
+Receiver Gain: 3dBi
+Received Power: 3.9751e-8 Watts
+
+
+Tower Three:
+MCC: 505
+MNC: 1
+LAC / TAC: 38241
+CID: 441
+Radio Type: GSM
+Transmitter Power: 10 Watts
+Transmitter Gain: 10 dBi
+Frequency: 1800 Mhz
+Receiver Gain: 3dBi
+Received Power: 5.1848e-9 Watts
