@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html>
+    <head> 
+        <script src="https://cdn.tailwindcss.com"></script>
+        <script>
+            var loaded = false;
+            function onload(){
+                if (loaded) { return }
+                
+                const h = new Headers();
+                h.append("Content-Type", "application/json");
+                fetch("/list", { 
+                        method: "POST",
+                        headers: h,
+                    }).then((res)=>{
+                      loaded = true;
+                      return res.json();
+                }).then(data=>{
+                    document.querySelector("#ducks").innerHTML = data["output"].map(i=>i["itemLabel"]).map(value => ({ value, sort: Math.random() })).sort((a, b) => a.sort - b.sort).map(({ value }) => value).map(i=>`<span class="select-none cursor-pointer" onclick="duck('${i}')">${i}</span>`).reduce((a,b)=>a+"<br/>"+b);
+                }); 
+            }
+            function out(id,t){
+                document.querySelector("#"+id).innerText = t;
+            };
+            function duck(t){
+                document.querySelector("#duck").value = t;
+                send();
+            }
+            var grid;
+            function send(){
+                let u = document.querySelector("#duck").value;
+                const h = new Headers();
+                h.append("Content-Type", "application/json");
+
+                fetch("/duck", { 
+                        method: "POST",
+                        body: JSON.stringify({ duck: u }),
+                        headers: h,
+                    }).then((res)=>{
+                        out("status", res.status+" "+res.statusText);
+                        if(res.status === 200){
+                            document.querySelector("#box").style="";
+                        }
+                        return res.json();
+                }).then(data=>{
+                    document.querySelector("#duckImage").src = data["output"][0]["image"];
+                    document.querySelector("#duckName").innerText  = data["output"][0]["itemLabel"];
+                    document.querySelector("#duckDesc").innerText  = data["output"][0]["itemDescription"];
+                }).catch(err=>{
+                    //out("output", err);
+                    document.querySelector("#duckImage").src = "error.jpeg"
+                    document.querySelector("#duckName").innerText  = "Glitchus Anatidae"
+                    document.querySelector("#duckDesc").innerText  = "species of computer artifact";
+                });
+            };
+        </script>
+        <title>Who'sThatDuck</title>
+    </head>
+    <body onload="onload()">
+        <div class="flex min-h-full flex-col justify-center px-6 py-12 lg:px-8">
+            <div class="sm:mx-auto sm:w-full sm:max-w-sm">
+              <img class="mx-auto h-10 w-auto" src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=600" alt="Your Company">
+              <h2 class="mt-10 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">Who'sThatDuck</h2>
+            </div>
+          
+            <div style="mask-image: linear-gradient(to bottom, rgba(0, 0, 0, 0), rgba(0, 0, 0, 1), rgba(0, 0, 0, 0)">
+              <marquee id="ducks" scrollamount="1" style="height: 3em;" class="text-center" direction="up"></marquee>
+            </div>
+            <div class="mt-0 sm:mx-auto sm:w-full sm:max-w-sm">
+              <div class="space-y-6">
+                <div>
+                  <label for="duck" class="block text-sm font-medium leading-6 text-gray-900">Duck Name</label>
+                  <div class="mt-2">
+                    <input id="duck" name="duck" type="text" value="Freckled Duck" class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6">
+                  </div>
+                </div>
+          
+                <div>
+                  <button onclick="send()" class="flex w-full px-2 justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">Get Duck</button>
+                </div>
+          
+                <p class="mt-10 text-center text-sm text-gray-500">
+                  Database broken?
+                  <a href="reset" class="font-semibold leading-6 text-indigo-600 hover:text-indigo-500">Fix it</a>
+                </p>        
+
+                <div id="box" style="display:none;">
+                  <b id="duckName"></b>&nbsp;<span id="status" class="mt-10 font-bold text-sm text-gray-500"></span>
+                  <br/>
+                  <i id="duckDesc"class="mt-10 font-bold text-sm text-gray-500"></i>
+                  <br/>
+                  <img id="duckImage" class="w-full"/>
+                </div>
+              </div>    
+
+              <div class="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
+              </div>
+            </div>
+            <p class="mt-10 text-center text-sm text-gray-500" id="output"></p>
+          </div>
+    </body>
+</html>
